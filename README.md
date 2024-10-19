@@ -58,10 +58,11 @@ python app.py
 Once the application starts running open the `127.0.0.1:5000` to find the index page.
 ## Features
 - Registration & Login: Users can securely register and log in using credentials.
-- File Uploads: Files are encrypted before uploading and stored in Firebase Storage.
-- File Search & Access Control: Users can search for files by tags or description and request access for secure sharing.
+- Client-Side Key Generation: End users create a public-private key pair while registering.
+- File Uploads: Files and folders are encrypted before uploading and stored in Firebase Storage.
+- File Search & Access Control: Users can search for files by tags or description and share a file with another user.
 - Profile Management: Users can view and update their profile information, such as email and password.
-- File Sharing & Requests: Request file access, and securely share files using public/private keys.
+- File Sharing & Requests: File access, and securely share files using public/private keys.
 
 ## Acknowledgments
 
