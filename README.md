@@ -47,7 +47,7 @@ cd Masters-Project
 pip install Flask Flask-SQLAlchemy Flask-Login APScheduler firebase-admin hurry.filesize
 ```
 ### Step 3: Set Up Firebase
-- Download the Firebase service account key (serviceAccountKey.json) from the Firebase Console.
+- Download the Firebase service account key (and name it serviceAccountKey.json) from the Firebase Console.
 - Place the downloaded file in the root of your project directory.
   
 ## Usage
