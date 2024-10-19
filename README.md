@@ -42,3 +42,20 @@ To set up the application, follow the steps below.
 ```bash
 git clone https://github.com/praneethpillarisetty/Masters-Project.git
 cd Masters-Project
+```
+
+### Step 2: Install Dependencies
+```bash
+pip install Flask Flask-SQLAlchemy Flask-Login APScheduler firebase-admin hurry.filesize
+```
+### Step 2: Set Up Firebase
+- Download the Firebase service account key (serviceAccountKey.json) from the Firebase Console.
+- Place the dowloaded file in the root of your project directory.
+  
+## Usage
+To start the Flask application, simply run:
+```bash
+python app.py
+```
+Once the application starts running open the `127.0.0.1:5000` to find the index page.
+
