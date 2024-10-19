@@ -19,7 +19,7 @@ This application sets a new standard for secure data management, offering users 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
-- [Contributors](#contributing)
+- [Acknowledgments](#Acknowledgments)
 
 ## Folder Structure
 
@@ -48,10 +48,10 @@ pip install Flask Flask-SQLAlchemy Flask-Login APScheduler firebase-admin hurry.
 ```
 ### Step 3: Set Up Firebase
 - Download the Firebase service account key (serviceAccountKey.json) from the Firebase Console.
-- Place the dowloaded file in the root of your project directory.
+- Place the downloaded file in the root of your project directory.
   
 ## Usage
-To start the Flask application, simply run:
+To start the Flask application, run:
 ```bash
 python app.py
 ```
@@ -63,13 +63,11 @@ Once the application starts running open the `127.0.0.1:5000` to find the index 
 - Profile Management: Users can view and update their profile information, such as email and password.
 - File Sharing & Requests: Request file access, and securely share files using public/private keys.
 
-## Contributors
+## Acknowledgments
 
-| Name                                        | Role          |
-|---------------------------------------------|---------------|
-| **Venkata Satya Sai Praneeth Pillarisetty** | Developer     |
-| **Dr. Ouyang, Jinsong**                     | 1st Reader    |
-| **Dr. Syed Badruddoja**                     | 2nd Reader    |
+I am grateful to my project guide, **Dr. Ouyang, Jinsong**, who provided me with valuable guidance, unwavering support, and encouragement throughout this project. Their knowledge, insightful criticism, and unwavering dedication were crucial during my master's project.
+
+I would also like to express my gratitude to **Dr. Syed Badruddoja**, who helped with this project as a second reader. Their wise observations and recommendations substantially raised the caliber of this project. I value the time and energy they invested in reviewing and offering helpful criticism.
 
 
 
