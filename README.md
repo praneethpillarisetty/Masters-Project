@@ -18,10 +18,8 @@ This application sets a new standard for secure data management, offering users 
 - [Folder Structure](#folder-structure)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Configuration](#configuration)
 - [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
+- [Contributors](#contributing)
 
 ## Folder Structure
 
@@ -48,7 +46,7 @@ cd Masters-Project
 ```bash
 pip install Flask Flask-SQLAlchemy Flask-Login APScheduler firebase-admin hurry.filesize
 ```
-### Step 2: Set Up Firebase
+### Step 3: Set Up Firebase
 - Download the Firebase service account key (serviceAccountKey.json) from the Firebase Console.
 - Place the dowloaded file in the root of your project directory.
   
@@ -58,4 +56,20 @@ To start the Flask application, simply run:
 python app.py
 ```
 Once the application starts running open the `127.0.0.1:5000` to find the index page.
+## Features
+- Registration & Login: Users can securely register and log in using credentials.
+- File Uploads: Files are encrypted before uploading and stored in Firebase Storage.
+- File Search & Access Control: Users can search for files by tags or description and request access for secure sharing.
+- Profile Management: Users can view and update their profile information, such as email and password.
+- File Sharing & Requests: Request file access, and securely share files using public/private keys.
+
+## Contributors
+
+| Name                                        | Role          |
+|---------------------------------------------|---------------|
+| **Venkata Satya Sai Praneeth Pillarisetty** | Developer     |
+| **Dr. Ouyang, Jinsong**                     | 1st Reader    |
+| **Dr. Syed Badruddoja**                     | 2nd Reader    |
+
+
 
