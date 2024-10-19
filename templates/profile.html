@@ -1,0 +1,150 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .form-container {
+        display: none; /* Hide all forms initially */
+        margin-top: 20px;
+    }
+
+    .edit-option {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+        .edit-option .fa-edit {
+            font-size: 15px;
+            color: black;
+            margin-left: 8px;
+        }
+
+    .content {
+        width: 90%;
+        max-width: 800px;
+        margin: 100px auto 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        color: #666;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px 20px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+    .profile-info {
+        margin: 20px 0;
+        font-size: 18px;
+    }
+
+        .profile-info p {
+            margin: 10px 0;
+        }
+</style>
+
+<h1 align="center"><i class="fa-solid fa-user-circle profile-icon"></i> Profile</h1>
+
+<div class="profile-info" align="center">
+    <p>
+        <div align="center" class="edit-option" onclick="showForm('change-fname-form')">
+            <span><b>First Name: </b>{{ user_data.first_name }}</span><i class="fas fa-edit"></i>
+        </div>
+    </p>
+    <p>
+        <div align="center" class="edit-option" onclick="showForm('change-lname-form')">
+            <span><b>Last Name: </b>{{ user_data.last_name }}</span><i class="fas fa-edit"></i>
+        </div>
+    </p>
+    <p>
+        <div align="center" class="edit-option" onclick="showForm('change-email-form')">
+            <span><b>Email: </b>{{ user_data.email }}</span><i class="fas fa-edit"></i>
+        </div>
+    </p>
+    <p>
+        <div align="center" class="edit-option" onclick="showForm('change-password-form')">
+            <span><b>Password: </b>********</span><i class="fas fa-edit"></i>
+        </div>
+    </p>
+</div>
+
+<!-- Change First Name Form -->
+<div id="change-fname-form" class="form-container">
+    <h2>Change First Name</h2>
+    <form method="POST" action="/change_first_name">
+        <label for="first_name">New First Name:</label>
+        <input type="text" id="first_name" name="new_first_name" value="{{ user_data.first_name }}" required>
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<!-- Change Last Name Form -->
+<div id="change-lname-form" class="form-container">
+    <h2>Change Last Name</h2>
+    <form method="POST" action="/change_last_name">
+        <label for="last_name">New Last Name:</label>
+        <input type="text" id="last_name" name="new_last_name" value="{{ user_data.last_name }}" required>
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<!-- Change Email Form -->
+<div id="change-email-form" class="form-container">
+    <h2>Change Email</h2>
+    <form method="POST" action="/change_email">
+        <label for="email">New Email:</label>
+        <input type="email" id="email" name="new_email" value="{{ user_data.email }}" required>
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<!-- Change Password Form -->
+<div id="change-password-form" class="form-container">
+    <h2>Change Password</h2>
+    <form method="POST" action="/change_password">
+        <label for="current_password">Current Password:</label>
+        <input type="password" id="current_password" name="current_password" required>
+        <label for="new_password">New Password:</label>
+        <input type="password" id="new_password" name="new_password" required>
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<script>function showForm(formId) {
+        document.querySelectorAll('.form-container').forEach(function(form) {
+            form.style.display = 'none';
+        });
+        document.getElementById(formId).style.display = 'block';
+    }</script>
+{% endblock %}

@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #666;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="file"],
+        input[type="submit"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #45a049;
+            }
+
+        .forgot-link,
+        .register-link {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #0066cc;
+            cursor: pointer;
+        }
+
+            .forgot-link:hover,
+            .register-link:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <h2>User Login</h2>
+    <form id="loginForm" method="POST" enctype="multipart/form-data">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="key_file">Key File:</label>
+        <input type="file" id="key_file" name="key_file" accept=".txt" required>
+
+        <!-- Hidden input to store file name -->
+        <input type="hidden" id="file_name" name="file_name">
+
+        <input type="submit" value="Login">
+    </form>
+
+    <a class="forgot-link" id="forgotLink">Forgot/Lost Keys File</a>
+    <a href="/register" class="register-link">Not a user? Register here</a>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData();
+            const keyFile = document.getElementById('key_file').files[0];
+            const public_key = await extractPublicKey(keyFile);
+            const private_key = await extractPrivateKey(keyFile);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('password', document.getElementById('password').value);
+            formData.append('file_name', keyFile.name);
+            formData.append('public_key', public_key);
+
+            // Store keys and the key file in local storage
+            const email = document.getElementById('email').value.toLowerCase();
+            const reader = new FileReader();
+            reader.onload = function () {
+                const keyFileContent = reader.result;
+                localStorage.setItem(`publickey_${email}`, public_key);
+                localStorage.setItem(`privatekey_${email}`, private_key);
+                localStorage.setItem(`keyfile_${email}`, keyFileContent);
+            };
+            reader.readAsText(keyFile);
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = '/home';
+            } else {
+                alert('Login failed. Please check your credentials.');
+            }
+        });
+
+        document.getElementById('forgotLink').addEventListener('click', async () => {
+            const email = prompt('Please enter your email to retrieve your keys file if you have used this computer/browser before:');
+            if (email) {
+                const password = prompt('Please enter your password for validation:');
+                if (password) {
+                    // Validate password with the server
+                    const response = await fetch(`/validate-password?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+
+                    if (response.ok) {
+                        const keyFileContent = localStorage.getItem(`keyfile_${email}`);
+                        if (keyFileContent) {
+                            const blob = new Blob([keyFileContent], { type: 'text/plain' });
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = 'keys.txt';
+                            link.click();
+                        } else {
+                            alert('No keys file found for this email.');
+                        }
+                    } else {
+                        alert('Password validation failed. Please check your credentials.');
+                    }
+                }
+            }
+        });
+
+
+        function extractPublicKey(keyFile) {
+            return new Promise((resolve, reject) => {
+                const fileReader = new FileReader();
+                fileReader.onload = () => {
+                    const keysText = fileReader.result;
+                    const startIdx = keysText.indexOf("Public Key:") + "Public Key:".length;
+                    const endIdx = keysText.indexOf("Private Key:");
+                    const publicKey = keysText.substring(startIdx, endIdx).trim();
+                    resolve(publicKey);
+                };
+                fileReader.onerror = () => {
+                    reject("Error reading file.");
+                };
+                fileReader.readAsText(keyFile);
+            });
+        }
+
+        function extractPrivateKey(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const keysText = reader.result;
+                        const startIdx = keysText.indexOf("Private Key:") + "Private Key:".length;
+                        // const endIdx = keysText.indexOf("Symmetric Key:");
+                        if (startIdx === -1) {
+                            reject(new Error("Private key or public key not found in the keys file"));
+                            return;
+                        }
+                        const privateKeyBase64 = keysText.substring(startIdx).trim();
+                        resolve(privateKeyBase64);
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsText(file);
+            });
+        }
+    </script>
+</body>
+</html>

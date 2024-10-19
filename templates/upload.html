@@ -1,0 +1,53 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="file-container">
+    <div class="upload-container">
+        <script src="{{ url_for('static', filename='upload.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='common_functions.js') }}" defer></script>
+        <script>const email = "{{ email }}";
+        </script>
+
+        <form id="uploadForm" method="post" action="/upload" enctype="multipart/form-data">
+            <div class="upload-option">
+                <label for="uploadType">Choose Upload Type:</label>
+                <select id="uploadType">
+                    <option value="files">Files</option>
+                    <option value="folder">Folder</option>
+                </select>
+            </div>
+            <label for="fileInput">Select the file to encrypt and upload:</label>
+            <input type="file" id="fileInput" name="file" required>
+            <br>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+            <br>
+            <label for="tags">Tags (at least 3):</label>
+            <input type="text" id="tags" name="tags" required>
+            <br>
+            <label for="folderPath">Folder/Path:</label>
+            <input type="text" id="folderPath" name="folderPath" placeholder="Enter folder/path" list="folderList" value="/">
+            <datalist id="folderList"></datalist>
+            <span id="folderError" style="color: red; font-size: 0.9em;"></span>
+            <br>
+            <label for="visibility">Visibility:</label>
+            <div class="switch-container">
+                <span class="switch-label">Private</span>
+                <label class="switch">
+                    <input type="checkbox" id="visibility" name="visibility">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switch-label">Public</span>
+            </div>
+            <br>
+            <button type="submit">Upload</button>
+            <!-- Hidden fields -->
+            <input type="hidden" id="data_types" name="data_types[]">
+            <input type="hidden" id="digital_signatures" name="digital_signatures[]">
+            <input type="hidden" id="encrypted_keys" name="encrypted_keys[]">
+            <input type="file" id="keysFileInput" style="display:none;" />
+        </form>
+    </div>
+</div>
+    {% endblock %}

@@ -282,6 +282,7 @@
                     white-space: nowrap;
                 }
     }
+
     #search-bar {
         width: 100%; /* Make the input field full width */
         padding: 10px; /* Add padding for a better look */
@@ -313,38 +314,60 @@
             }
 
     #user-list {
-        display: flex;
+        display: block;
         flex-wrap: wrap;
         gap: 10px;
     }
-    .search-container {
-        display: flex;
-        top: 20px;
-        right: 20px;
-        width: 10px;
-        padding: 10px;
-        background-color: #f9f9f9;
+
+    .user-block {
+        border: 1px solid #ccc;
         border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 10px; /* Adjust width and margin as needed */
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
     }
 
-    /* Style for the search input field */
-    #search-input {
-        width: 100%; /* Full width of the container */
-        padding: 10px; /* Padding inside the input field */
-        font-size: 16px; /* Larger font size */
-        border: 1px solid #ddd; /* Light border */
-        border-radius: 5px; /* Rounded corners */
-        box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        .user-block p {
+            margin: 0 0 10px;
+        }
+
+        .user-block button {
+            margin-right: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .user-block .extend-time {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+
+        .user-block .revoke-access {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+
+    #back-button {
+        margin-top: 20px;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
     }
 </style>
-<script src="{{ url_for('static', filename='home.js') }}" defer></script>
+<script src="{{ url_for('static', filename='shared_by_me.js') }}" defer></script>
 <script src="{{ url_for('static', filename='common_functions.js') }}" defer></script>
 <script>
-    var metadataList = {{ metadata_list | tojson | safe }};
+    const metadataList = {{ metadata_list | tojson | safe }};
     const currentUserEmail = "{{ email }}";
     window.metadataList = metadataList;
 </script>
+<h1 align="center"><i class="fa-solid fa-paper-plane"></i> Shared by Me </h1>
 <div id="tooltip" style="position: absolute;
       display: none; background: #f5f5f5;
       color: #000; border: 1px solid #ccc;
@@ -371,6 +394,7 @@
     <h2 id="share-modal-title" style="margin-top: 0;">Share with Users</h2>
     <input type="text" id="search-bar" placeholder="Search users..." style="width: calc(100% - 16px); padding: 8px; margin-bottom: 10px; box-sizing: border-box;">
     <ul id="search-results" style="list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; border: 1px solid #ccc; border-radius: 4px; background: #f9f9f9;"></ul>
+    <label for="share-duration">Select duration (days):</label>
     <select id="share-duration" style="width: 100%; padding: 8px; margin-top: 10px;">
         <option value="30">30 days</option>
         <option value="60">60 days</option>
@@ -380,15 +404,14 @@
     <button id="close-share-modal" style="margin-top: 10px; padding: 8px 16px; border: none; background-color: #007bff; color: #fff; cursor: pointer; border-radius: 4px;">Close</button>
 </div>
 
-
+<div id="shared-users-modal" style="display:none;">
+    <div id="shared-users-content"></div>
+    <button onclick="document.getElementById('shared-users-modal').style.display='none';">Close</button>
+</div>
 
 <div class="folder-container">
 </div>
-<h1 align="center"><i class="fa-solid fa-house-user"></i> Home </h1>
-<div id="search-container" style="margin-bottom: 20px;">
-    <input type="text" id="search-input" placeholder="Search your files..." />
-</div>
-<div class="file-table-container">
+<div id="file-table-container" class="file-table-container">
     <table id="file-table">
         <thead>
             <tr>

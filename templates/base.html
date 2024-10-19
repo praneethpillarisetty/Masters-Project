@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="{{ url_for('static', filename='flash-messages.js') }}" defer></script>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <div class="menu">
+        <h1>My App</h1>
+        <ul>
+            <li><button onclick="location.href='{{ url_for('home') }}';"><i class="fa-solid fa-home"></i> Home</button></li>
+            <li><button onclick="location.href='{{ url_for('my_files') }}';"><i class="fa-solid fa-folder"></i> My Files</button></li>
+            <li><button onclick="location.href='{{ url_for('shared_with_me') }}';"><i class="fa-solid fa-share-square"></i> Shared with Me</button></li>
+            <li><button onclick="location.href='{{ url_for('shared_by_me') }}';"><i class="fa-solid fa-share-alt-square"></i> Shared by Me</button></li>
+            <li><button onclick="location.href='{{ url_for('profile') }}';"><i class="fa-solid fa-user"></i> Profile</button></li>
+            <li class="logout"><button onclick="location.href='{{ url_for('logout') }}';"><i class="fa-solid fa-sign-out-alt"></i> Logout</button></li>
+        </ul>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+</body>
+</html>
